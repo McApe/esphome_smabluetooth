@@ -66,8 +66,8 @@ bool ESP32_SMA_Inverter::connect() {
 bool ESP32_SMA_Inverter::connect(uint8_t ra[]) {
   ESP_LOGD(TAG, "connecting %02X:%02X:%02X:%02X:%02X:%02X", 
     ra[5], ra[4], ra[3], ra[2], ra[1], ra[0]);
-  delay(10);
   bool bGotConnected = serialBT.connect(ra);
+  ESP_LOGD(TAG, "connected? %d", bGotConnected);
   btConnected = bGotConnected;
   return bGotConnected; 
 }
