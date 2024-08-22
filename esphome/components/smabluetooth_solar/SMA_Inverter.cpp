@@ -64,10 +64,20 @@ bool ESP32_SMA_Inverter::connect() {
 }
 
 bool ESP32_SMA_Inverter::connect(uint8_t ra[]) {
-  ESP_LOGD(TAG, "connecting %02X:%02X:%02X:%02X:%02X:%02X", 
-    ra[5], ra[4], ra[3], ra[2], ra[1], ra[0]);
-  bool bGotConnected = serialBT.connect(ra);
-  ESP_LOGD(TAG, "connected? %d", bGotConnected);
+  ESP_LOGD(TAG, "connecting %02X:%02X:%02X:%02X:%02X:%02X", ra[5], ra[4], ra[3], ra[2], ra[1], ra[0]);
+  bool bGotConnected = false;
+  if (serialBT.hasClient()) {
+    bGotConnected = serialBT.connect(ra);
+    if (bGotConnected) {
+      ESP_LOGD(TAG, "Connected to %02X:%02X:%02X:%02X:%02X:%02X", 
+        ra[5], ra[4], ra[3], ra[2], ra[1], ra[0]);
+    } else {
+      ESP_LOGE(TAG, "Failed to connect to %02X:%02X:%02X:%02X:%02X:%02X", 
+        ra[5], ra[4], ra[3], ra[2], ra[1], ra[0]);
+    }
+  } else {
+    ESP_LOGE(TAG, "No client available for connection");
+  }
   btConnected = bGotConnected;
   return bGotConnected; 
 }
